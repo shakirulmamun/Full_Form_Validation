@@ -1,0 +1,231 @@
+﻿@model WebApp.Models.tbl_User
+
+@{
+    ViewBag.Title = "UserProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <link href="~/CustomeStyleSheet/ProfileIStyleSheet1.css" rel="stylesheet" />
+</head>
+
+<h2 style="text-align:center">Profile Update</h2>
+<br />
+<br />
+<br />
+
+@using (Html.BeginForm("UserProfile", "Authentication", FormMethod.Post, new { @class = "form-horizontal", enctype="multipart/form-data" }))
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+
+                <div class="UserProfileImage">
+
+                    <input type="file" class="hidden" id="BrowseImage" accept="image/png,image/jpg,image/jpeg" name="UserImageFile" />
+
+                    <img src="@Url.Content(Model.ImagePath)" class="img-responsive" id="UserImage" />
+                    <p class="image-desc text-center">Allowed Image Size : 474px * 708px</p>
+
+                    <div class="upload-image">
+                        <img src="~/images/5.png" class="img-responsive" />
+                    </div>
+
+                    <div class="remove-image">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="UserProfileFrom">
+                    @Html.HiddenFor(model => model.UserId)
+
+                    @* jodi user image select na korea tahole image stay korbe er jonno *@
+                    @Html.HiddenFor(model => model.ImagePath)
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <label class="radio-inline">
+                                @Html.RadioButtonFor(model => model.Gender, "Male", new { @class = "gender" })
+                                Male
+                            </label>
+                            <label class="radio-inline">
+                                @Html.RadioButtonFor(model => model.Gender, "Female", new { @class = "gender" })
+                                Female
+                            </label>
+
+                            @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">
+                            Interest
+                        </label>
+                        <div class="col-md-10">
+                            <label class="checkbox-inline">
+                                @Html.CheckBox("Csharp", Model.IsInterestInCsharp.Value)
+                                C#
+                            </label>
+                            <label class="checkbox-inline">
+                                @Html.CheckBox("Java", Model.IsInterestInJava.Value)
+                                Java
+                            </label>
+                            <label class="checkbox-inline">
+                                @Html.CheckBox("Python", Model.IsInterestInPython.Value)
+                                Python
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">
+                            Cities
+                        </label>
+
+                        <div class="col-md-10">
+                            @* @Html.DropDownListFor(model=>model.CityId, ViewBag.CityList as SelectList,"--Select City--", new {@class="form-control"})*@
+                            @Html.DropDownListFor(model => model.CityId, Model.CityList as SelectList, "--Select City--", new { @class = "form-control" })
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DoB, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.DoB, new { htmlAttributes = new { @class = "form-control", placeholder = "Date Of Birth", @readonly = "true" } })
+                            @Html.ValidationMessageFor(model => model.DoB, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Submit" class="btn btn-primary" />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+
+
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<script type="text/javascript">
+
+    //Browse Image
+
+    $('#UserImage').click(function () {
+        UploadClickEvent();
+
+    });
+
+    $('.upload-image').click(function () {
+        UploadClickEvent();
+
+    });
+
+    function UploadClickEvent() {
+        $('#BrowseImage').trigger('click');
+    }
+
+
+    //Select & Upload
+    $('#BrowseImage').change(function () {
+
+        var Files = this.files;
+        if (Files && Files[0]) {
+            var fileReader = new FileReader();
+            fileReader.readAsDataURL(Files[0]);
+            fileReader.onload = function (x) {
+
+                var image = new Image;
+                image.src = x.target.result;
+                image.onload = function () {
+                    var width = this.width;
+                    var height = this.height;
+                    var type = Files[0].type;
+
+                    if ((width == "474" && height == "708") && (type == "image/png" || type == "image/jpg" || type == "image/jpeg" ))
+                    {
+                        $('#UserImage').attr('src', x.target.result);
+                        $('.image-desc').css("color", "black");
+                    }
+                    else {
+                        $('.image-desc').css("color", "red");
+                    }
+
+                    //alert("width : " + width + ", height : " + height + ", type : " + type);
+                }
+            }
+        }
+    });
+
+    //Remove image
+
+    $('.remove-image').click(function () {
+        $('#UserImage').attr('src', "/images/6.jpg");
+
+        //jodi image na deya hoy tahole null data pass hobe setar jonno
+        $('#ImagePath').val("/images/6.jpg");
+    })
+        
+    
+
+</script>
+
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryui")
+    @Styles.Render("~/Content/cssjqryUi")
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('input[type=datetime]').datepicker({
+                dateFormat: "dd/M/yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-60:+0"
+            });
+
+        });
+    </script>
+
+} 

@@ -1,0 +1,20 @@
+1. Add Html validation herlper:   
+
+@Html.AntiForgeryToken()
+@Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+
+2. Add [Required] attribute in model:
+ 
+[Required]
+[Display(Name ="Product Name")]
+public string Name { get; set; }
+
+
+[HttpPost]
+public ActionResult Create(tbl_Product product)
+
+3. Add ModelState.IsValid
+
+{
+baki code gula er vitor a hobe..
+}
